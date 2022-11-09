@@ -1,9 +1,12 @@
 package Steps;
 
+import io.cucumber.java.AfterAll;
+import io.cucumber.java.Before;
 import io.cucumber.java.BeforeAll;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.After;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -14,18 +17,30 @@ import org.openqa.selenium.edge.EdgeDriver;
 import java.awt.*;
 
 public class Logowanie {
-    WebDriver driver;
+    static WebDriver driver;
     @BeforeAll
-    public void setDriver()        //musi byc metoda publiczna, nie zwracac wartosci
+    public static void setDriver() {
+        System.out.println("Uruchomienie przed każdym scenariuszem testowym");
+        driver = new ChromeDriver();    //otwieranie przegladarki chrome
+        driver.manage().window().maximize();        //maksymalizacja okna
+
+    }       //musi byc metoda publiczna, nie zwraca wartosci//
+@Before
+    public void before() {
+        System.out.println("Hakuna matata");
+    }
 
     @Given("Użytkownik otwiera przeglądarkę")
     public void testUzytkownikOtwieraPrzegladarke() {
         System.out.println("Użytkownik otworzył przeglądarkę");
         //System.setProperty("webdriver.chrome.driver","C:\\Users\\wituc\\Downloads\\chromedriver_win32\\chromedriver.exe");
-        driver = new ChromeDriver();//otwieranie przegladarki chrome
-        driver.manage().window().maximize();//maksymalizacja okna
+
 
     }    //metoda testowa 1
+    @Given("Użytkownik podaje adres {string}")
+    public void użytkownik_podaje_adres(String url) {
+        driver.navigate().to(url);
+    }
 
     @Given("Użytkownik podaje adres https:\\/\\/the-internet.herokuapp.com\\/login")
     public void użytkownik_podaje_adres_https_the_internet_herokuapp_com_login() {
@@ -40,6 +55,16 @@ public class Logowanie {
         System.out.println("Użytkownik wpisuje poprawny login");
         driver.findElement(By.id("username")).sendKeys("tomsmith");//zlokalizuj okno username i wpisz aaa
     }//metoda testowa 3
+
+    @When("Użytkownik wpisuje {string} w pole username")
+    public void użytkownik_wpisuje_w_pole_username(String nazwaUzytkownika) {
+        driver.findElement(By.id("username")).sendKeys(nazwaUzytkownika);
+    }
+
+    @When("Użytkownik wpisuje {string} w pole password")
+    public void użytkownik_wpisuje_w_pole_password(String hasloUzytkownika) {
+        driver.findElement(By.id("password")).sendKeys(hasloUzytkownika);
+    }
 
     @When("Użytkownik wpisuje poprawne haslo")
     public void użytkownik_wpisuje_poprawne_haslo() {
@@ -66,14 +91,17 @@ public class Logowanie {
         // Write code here that turns the phrase above into concrete actions
         System.out.println("Użytkownik został poprawnie zalogowany");
         Assert.assertEquals("https://the-internet.herokuapp.com/secure",driver.getCurrentUrl());
-        driver.close();
+        //driver.close();
     }//metoda testowa 6
 
     @Then("Użytkownik niezostał poprawnie zalogowany")
     public void uzytkownikNiezostalPoprawnieZalogowany() {
         System.out.println("Użytkownik nie został poprawnie zalogowany");
         Assert.assertEquals("https://the-internet.herokuapp.com/login",driver.getCurrentUrl());
-        driver.close();
+        //driver.close();
     }
-
+@AfterAll
+    public static void tearDown(){
+       driver.close();
+}
 }
