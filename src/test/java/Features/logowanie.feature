@@ -4,25 +4,27 @@ Feature: Logowanie do aplikacji
   Jako użytkownik chcę mieć możliwość zalogowania
   do aplikacji móc korzystać z zaawansowanych
   funkcji systemu
-@pc
+
+  @pc
   Scenario: Poprawne logowanie do aplikacji
     Given Użytkownik podaje adres https://the-internet.herokuapp.com/login
     When Użytkownik wpisuje poprawny username
-      And Użytkownik wpisuje poprawne haslo
-      And Użytkownik klika przycisk login
+    And Użytkownik wpisuje poprawne haslo
+    And Użytkownik klika przycisk login
     Then Użytkownik został poprawnie zalogowany
     #komentarze robimy poprzez hasz i tekst :)
     #given=preconditions(warunki poczatkowe)
     #When=kroki
     #then=sprawdzenie
     #And=kolejne warunki, kroki rezultaty
-@mobile @pc
+  @mobile @pc
   Scenario: Niepoprawne logowanie do aplikacji
     Given Użytkownik podaje adres https://the-internet.herokuapp.com/login
     When Użytkownik wpisuje poprawny username
     And Użytkownik wpisuje niepoprawne haslo
     And Użytkownik klika przycisk login
     Then Użytkownik niezostał poprawnie zalogowany
+
   Scenario: Poprawne logowanie do aplikacji (2 wersja)
     Given Użytkownik podaje adres "https://the-internet.herokuapp.com/login"
     When Użytkownik wpisuje "tomsmith" w pole username
@@ -30,7 +32,7 @@ Feature: Logowanie do aplikacji
     And Użytkownik klika przycisk login
     Then Użytkownik został poprawnie zalogowany
 
-  @now
+
   Scenario: Niepoprawne logowanie do aplikacji (2wersja)
     Given Użytkownik podaje adres https://the-internet.herokuapp.com/login
     When Użytkownik wpisuje "tomsmith" w pole username
@@ -38,10 +40,24 @@ Feature: Logowanie do aplikacji
     And Użytkownik klika przycisk login
     Then Użytkownik nie został poprawnie zalogowany
 
-  @now
+
   Scenario: Niepoprawne logowanie do aplikacji (3wersja)
     Given Użytkownik podaje adres https://the-internet.herokuapp.com/login
     When Użytkownik wpisuje "     " w pole username
     And Użytkownik wpisuje "     " w pole password
     And Użytkownik klika przycisk login
     Then Użytkownik nie został poprawnie zalogowany
+
+  @now
+  Scenario Outline: Niepoprawne logowanie
+    Given Użytkownik podaje adres https://the-internet.herokuapp.com/login
+    When Użytkownik wpisuje <nazwaUzytkownika> w pole username
+    And Użytkownik wpisuje <haslo> w pole password
+    And Użytkownik klika przycisk login
+    Then Użytkownik nie został poprawnie zalogowany
+
+    Examples:
+      | nazwaUzytkownika | haslo                |
+      | tomsmith         | blaablaa             |
+      | tomsmith         | aaaaaa               |
+      | tomsmith         | SuperSecretPassword! |
