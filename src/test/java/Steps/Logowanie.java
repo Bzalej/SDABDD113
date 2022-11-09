@@ -1,5 +1,6 @@
 package Steps;
 
+import io.cucumber.java.BeforeAll;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -14,6 +15,8 @@ import java.awt.*;
 
 public class Logowanie {
     WebDriver driver;
+    @BeforeAll
+    public void setDriver()        //musi byc metoda publiczna, nie zwracac wartosci
 
     @Given("Użytkownik otwiera przeglądarkę")
     public void testUzytkownikOtwieraPrzegladarke() {
@@ -44,10 +47,13 @@ public class Logowanie {
         System.out.println("Użytkownik wpisuje poprawne hasło");
         WebElement inputPassword = driver.findElement(By.id("password"));
         inputPassword.sendKeys("SuperSecretPassword!");
-        //driver.findElement(By.id("password")).sendKeys("SuperSecretPassword!");//zlokalizuj okno password i wpisz sss
-
+        //driver.findElement(By.id("password")).sendKeys("SuperSecretPassword!");//zlokalizuj okno password i wpisz hasło
     }//metoda testowa 4
-
+    @When("Użytkownik wpisuje niepoprawne haslo")
+    public  void uzytkownikWpisujeNiepoprawneHaslo(){
+        System.out.println("Użytkownik wpisuje niepoprawne hasło");
+        driver.findElement(By.id("password")).sendKeys("Ptaki_Latają_Kluczem");
+    }
     @When("Użytkownik klika przycisk login")
     public void użytkownik_klika_przycisk_login() {
         // Write code here that turns the phrase above into concrete actions
@@ -62,5 +68,12 @@ public class Logowanie {
         Assert.assertEquals("https://the-internet.herokuapp.com/secure",driver.getCurrentUrl());
         driver.close();
     }//metoda testowa 6
+
+    @Then("Użytkownik niezostał poprawnie zalogowany")
+    public void uzytkownikNiezostalPoprawnieZalogowany() {
+        System.out.println("Użytkownik nie został poprawnie zalogowany");
+        Assert.assertEquals("https://the-internet.herokuapp.com/login",driver.getCurrentUrl());
+        driver.close();
+    }
 
 }

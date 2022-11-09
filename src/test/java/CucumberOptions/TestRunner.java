@@ -8,8 +8,9 @@ import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        features = "src/test/java/Features/",
-        glue = "Steps"
+        features = "src/test/java/Features/",//lokalizacja paczki ze scenariuszami
+        glue = "Steps",//zadanie ścieżki lokalizacji klasy, gdzie testy są napisane
+        //tags = "@pc && @mobile"//uruchomienie otagowanego scenariusza w logowanie.feature
 )
 
 public class TestRunner {
